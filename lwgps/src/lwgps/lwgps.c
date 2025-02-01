@@ -204,9 +204,14 @@ prv_parse_term(lwgps_t* ghandle) {
     } else if (ghandle->p.stat == STAT_GGA) { /* Process GPGGA statement */
         switch (ghandle->p.term_num) {
             case 1: /* Process UTC time */
-                ghandle->p.data.gga.hours = 10 * CTN(ghandle->p.term_str[0]) + CTN(ghandle->p.term_str[1]);
-                ghandle->p.data.gga.minutes = 10 * CTN(ghandle->p.term_str[2]) + CTN(ghandle->p.term_str[3]);
-                ghandle->p.data.gga.seconds = 10 * CTN(ghandle->p.term_str[4]) + CTN(ghandle->p.term_str[5]);
+                if (ghandle->p.term_pos >= 6) {
+                    ghandle->p.data.gga.hours = 10 * CTN(ghandle->p.term_str[0]) + CTN(ghandle->p.term_str[1]);
+                    ghandle->p.data.gga.minutes = 10 * CTN(ghandle->p.term_str[2]) + CTN(ghandle->p.term_str[3]);
+                    ghandle->p.data.gga.seconds = 10 * CTN(ghandle->p.term_str[4]) + CTN(ghandle->p.term_str[5]);
+                    ghandle->p.data.gga.time_valid = 1;
+                } else {
+                    ghandle->p.data.gga.time_valid = 0;
+                }
                 break;
             case 2:                                                         /* Latitude */
                 ghandle->p.data.gga.latitude = prv_parse_lat_long(ghandle); /* Parse latitude */
@@ -296,9 +301,17 @@ prv_parse_term(lwgps_t* ghandle) {
                 ghandle->p.data.rmc.course = prv_parse_float_number(ghandle, NULL);
                 break;
             case 9: /* Process date */
-                ghandle->p.data.rmc.date = (uint8_t)(10U * CTN(ghandle->p.term_str[0]) + CTN(ghandle->p.term_str[1]));
-                ghandle->p.data.rmc.month = (uint8_t)(10U * CTN(ghandle->p.term_str[2]) + CTN(ghandle->p.term_str[3]));
-                ghandle->p.data.rmc.year = (uint8_t)(10U * CTN(ghandle->p.term_str[4]) + CTN(ghandle->p.term_str[5]));
+                if (ghandle->p.term_pos >= 6) {
+                    ghandle->p.data.rmc.date =
+                        (uint8_t)(10U * CTN(ghandle->p.term_str[0]) + CTN(ghandle->p.term_str[1]));
+                    ghandle->p.data.rmc.month =
+                        (uint8_t)(10U * CTN(ghandle->p.term_str[2]) + CTN(ghandle->p.term_str[3]));
+                    ghandle->p.data.rmc.year =
+                        (uint8_t)(10U * CTN(ghandle->p.term_str[4]) + CTN(ghandle->p.term_str[5]));
+                    ghandle->p.data.rmc.date_valid = 1;
+                } else {
+                    ghandle->p.data.rmc.date_valid = 0;
+                }
                 break;
             case 10: /* Process magnetic variation */
                 ghandle->p.data.rmc.variation = prv_parse_float_number(ghandle, NULL);
@@ -396,6 +409,7 @@ prv_copy_from_tmp_memory(lwgps_t* ghandle) {
         ghandle->hours = ghandle->p.data.gga.hours;
         ghandle->minutes = ghandle->p.data.gga.minutes;
         ghandle->seconds = ghandle->p.data.gga.seconds;
+        ghandle->time_valid = ghandle->p.data.gga.time_valid;
         ghandle->dgps_age = ghandle->p.data.gga.dgps_age;
 #endif /* LWGPS_CFG_STATEMENT_GPGGA */
 #if LWGPS_CFG_STATEMENT_GPGSA
@@ -419,6 +433,7 @@ prv_copy_from_tmp_memory(lwgps_t* ghandle) {
         ghandle->date = ghandle->p.data.rmc.date;
         ghandle->month = ghandle->p.data.rmc.month;
         ghandle->year = ghandle->p.data.rmc.year;
+        ghandle->date_valid = ghandle->p.data.rmc.date_valid;
 #endif /* LWGPS_CFG_STATEMENT_GPRMC */
 #if LWGPS_CFG_STATEMENT_PUBX_TIME
     } else if (ghandle->p.stat == STAT_UBX_TIME) {

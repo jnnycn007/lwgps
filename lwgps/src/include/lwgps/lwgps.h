@@ -98,6 +98,7 @@ typedef struct {
     uint8_t hours;           /*!< Hours in UTC */
     uint8_t minutes;         /*!< Minutes in UTC */
     uint8_t seconds;         /*!< Seconds in UTC */
+    uint8_t time_valid;      /*!< Flag whether time data has been provided by GPS modem in a valid `6` digit format */
     lwgps_float_t dgps_age;  /*!< Age of DGPS correction data (in seconds) */
 #endif                       /* LWGPS_CFG_STATEMENT_GPGGA || __DOXYGEN__ */
 
@@ -127,6 +128,7 @@ typedef struct {
     uint8_t date;            /*!< Fix date */
     uint8_t month;           /*!< Fix month */
     uint8_t year;            /*!< Fix year */
+    uint8_t date_valid;      /*!< Flag whether date data has been provided by GPS modem in a valid `6` digit format */
 #endif                       /* LWGPS_CFG_STATEMENT_GPRMC || __DOXYGEN__ */
 
 #if LWGPS_CFG_STATEMENT_PUBX_TIME || __DOXYGEN__
@@ -177,9 +179,11 @@ typedef struct {
                 uint8_t hours;   /*!< Current UTC hours */
                 uint8_t minutes; /*!< Current UTC minutes */
                 uint8_t seconds; /*!< Current UTC seconds */
+                uint8_t
+                    time_valid; /*!< Flag whether time data has been provided by GPS modem in a valid `6` digit format */
                 lwgps_float_t dgps_age; /*!< Age of DGPS correction data (in seconds) */
-            } gga;               /*!< GPGGA message */
-#endif                           /* LWGPS_CFG_STATEMENT_GPGGA */
+            } gga;                      /*!< GPGGA message */
+#endif                                  /* LWGPS_CFG_STATEMENT_GPGGA */
 #if LWGPS_CFG_STATEMENT_GPGSA
             struct {
                 lwgps_float_t dop_h;        /*!< Horizontal dilution of precision */
@@ -197,10 +201,12 @@ typedef struct {
 #endif                                /* LWGPS_CFG_STATEMENT_GPGSV */
 #if LWGPS_CFG_STATEMENT_GPRMC
             struct {
-                uint8_t is_valid;        /*!< Status whether GPS status is valid or not */
-                uint8_t date;            /*!< Current UTC date */
-                uint8_t month;           /*!< Current UTC month */
-                uint8_t year;            /*!< Current UTC year */
+                uint8_t is_valid; /*!< Status whether GPS status is valid or not */
+                uint8_t date;     /*!< Current UTC date */
+                uint8_t month;    /*!< Current UTC month */
+                uint8_t year;     /*!< Current UTC year */
+                uint8_t
+                    date_valid; /*!< Flag whether time data has been provided by GPS modem in a valid `6` digit format */
                 lwgps_float_t speed;     /*!< Current spead over the ground in knots */
                 lwgps_float_t course;    /*!< Current course over ground */
                 lwgps_float_t variation; /*!< Current magnetic variation in degrees */

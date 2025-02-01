@@ -61,6 +61,8 @@ run_tests() {
     RUN_TEST(INT_IS_EQUAL(hgps.satellites_ids[10], 0));
     RUN_TEST(INT_IS_EQUAL(hgps.satellites_ids[11], 0));
 
+    RUN_TEST(INT_IS_EQUAL(hgps.time_valid, 1));
+    RUN_TEST(INT_IS_EQUAL(hgps.date_valid, 1));
     RUN_TEST(INT_IS_EQUAL(hgps.date, 8));
     RUN_TEST(INT_IS_EQUAL(hgps.month, 3));
     RUN_TEST(INT_IS_EQUAL(hgps.year, 1));
