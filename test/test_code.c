@@ -8,7 +8,7 @@
 #include "test_common.h"
 
 /* GPS handle */
-lwgps_t hgps;
+static lwgps_t hgps;
 
 /**
  * \brief           Dummy data from GPS receiver
@@ -24,8 +24,8 @@ const char gps_rx_data[] = ""
 /**
  * \brief           Run the test of raw input data
  */
-void
-run_tests() {
+int
+run_tests_main(void) {
     lwgps_init(&hgps); /* Init GPS */
 
     /* Process all input data */
@@ -69,4 +69,6 @@ run_tests() {
     RUN_TEST(INT_IS_EQUAL(hgps.hours, 18));
     RUN_TEST(INT_IS_EQUAL(hgps.minutes, 37));
     RUN_TEST(INT_IS_EQUAL(hgps.seconds, 30));
+
+    return 0;
 }

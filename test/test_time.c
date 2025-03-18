@@ -28,8 +28,8 @@ const char gps_rx_data_B[] = ""
 /**
  * \brief           Run the test of raw input data
  */
-void
-run_tests() {
+int
+run_tests_time(void) {
     lwgps_init(&hgps);
 
     /* Process and test block A */
@@ -63,4 +63,6 @@ run_tests() {
     RUN_TEST(INT_IS_EQUAL(hgps.clk_bias, 536057));
     RUN_TEST(FLT_IS_EQUAL(hgps.clk_drift, 257.043));
     RUN_TEST(INT_IS_EQUAL(hgps.tp_gran, 16));
+
+    return 0;
 }

@@ -9,29 +9,17 @@
 #include "lwgps/lwgps.hpp"
 
 /* External function */
-extern "C" void run_tests();
+extern "C" int run_tests_time(void);
+extern "C" int run_tests_main(void);
 
 Lwgps::Lwgps gps;
 
 int
 main() {
-    lwgps_float_t distance, bearing;
-    run_tests();
+    int ret = 0;
+    ret |= run_tests_main();
+    ret |= run_tests_time();
 
-    /* Calculate distance and bearing */
-    lwgps_distance_bearing(40.6, -73.7, 48.3, 11.7, &distance, &bearing);
-
-    printf("Distance: %lf meters\r\n", (double)distance);
-    printf("Bearing:  %lf degrees\r\n", (double)bearing);
-
-    lwgps_distance_bearing(48.3, 11.7, 40.6, -73.7, &distance, &bearing);
-    printf("Distance: %lf meters\r\n", (double)distance);
-    printf("Bearing:  %lf degrees\r\n", (double)bearing);
-
-    gps.distance_bearing(0, 0, 0, 0, 0, 0);
-
+    printf("Done\r\n");
     return 0;
 }
-
-/* JFK: 40.642569, -73.783790 */
-/* Munich: 48.353962, 11.775114 */

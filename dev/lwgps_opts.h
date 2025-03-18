@@ -34,11 +34,7 @@
 #ifndef LWGPS_HDR_OPTS_H
 #define LWGPS_HDR_OPTS_H
 
-/* Rename this file to "lwgps_opts.h" for your application */
-
-/*
- * Open "include/lwgps/lwgps_opt.h" and
- * copy & replace here settings you want to change values
- */
+#define LWGPS_CFG_STATEMENT_PUBX      1
+#define LWGPS_CFG_STATEMENT_PUBX_TIME 1
 
 #endif /* LWGPS_HDR_OPTS_H */
