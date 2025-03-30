@@ -1,14 +1,17 @@
-/*
- * This example uses direct processing function,
- * to process dummy NMEA data from GPS receiver
+/**
+ * \file            test_parse_standard.c
+ * \author          Tilen MAJERLE <tilen@majerle.eu>
+ * \brief           
+ * \version         0.1
+ * \date            2025-03-30
+ * 
+ * @copyright Copyright (c) 2025
+ * 
  */
 #include <stdio.h>
 #include <string.h>
 #include "lwgps/lwgps.h"
-#include "test_common.h"
-
-/* GPS handle */
-static lwgps_t hgps;
+#include "test.h"
 
 /**
  * \brief           Dummy data from GPS receiver
@@ -25,8 +28,9 @@ const char gps_rx_data[] = ""
  * \brief           Run the test of raw input data
  */
 int
-run_tests_main(void) {
-    lwgps_init(&hgps); /* Init GPS */
+test_run(void) {
+    lwgps_t hgps;
+    lwgps_init(&hgps);
 
     /* Process all input data */
     lwgps_process(&hgps, gps_rx_data, strlen(gps_rx_data));

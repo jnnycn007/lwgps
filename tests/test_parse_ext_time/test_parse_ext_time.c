@@ -1,11 +1,17 @@
-/*
- * This example uses direct processing function,
- * to process dummy PUBX TIME packets from GPS receiver
+/**
+ * \file            test_parse_ext_time.c
+ * \author          Tilen MAJERLE <tilen@majerle.eu>
+ * \brief           
+ * \version         0.1
+ * \date            2025-03-30
+ * 
+ * @copyright Copyright (c) 2025
+ * 
  */
 #include <stdio.h>
 #include <string.h>
 #include "lwgps/lwgps.h"
-#include "test_common.h"
+#include "test.h"
 
 #if !LWGPS_CFG_STATEMENT_PUBX_TIME
 #error "this test must be compiled with -DLWGPS_CFG_STATEMENT_PUBX_TIME=1"
@@ -29,7 +35,7 @@ const char gps_rx_data_B[] = ""
  * \brief           Run the test of raw input data
  */
 int
-run_tests_time(void) {
+test_run(void) {
     lwgps_init(&hgps);
 
     /* Process and test block A */
