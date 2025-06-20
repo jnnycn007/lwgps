@@ -384,7 +384,10 @@ prv_check_crc(lwgps_t* ghandle) {
     uint8_t crc;
     crc = (uint8_t)((CHTN(ghandle->p.term_str[0]) & 0x0FU) << 0x04U)
           | (CHTN(ghandle->p.term_str[1]) & 0x0FU); /* Convert received CRC from string (hex) to number */
-    return ghandle->p.crc_calc == crc;              /* They must match! */
+    if (ghandle->p.crc_calc != crc) {
+        return 0;
+    }
+    return 1; /* They must match! */
 }
 #else
 #define prv_check_crc(ghandle) (1)
