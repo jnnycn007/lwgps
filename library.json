@@ -31,6 +31,8 @@
         ]
     },
     "build": {
-        "includeDir": "lwgps/src/include"
+        "includeDir": "lwgps/src/include",
+        "srcDir": ".",
+        "srcFilter": "+<lwgps>"
     }
 }
