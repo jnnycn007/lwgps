@@ -173,19 +173,23 @@ prv_parse_term(lwgps_t* ghandle) {
     if (ghandle->p.term_num == 0) { /* Check string type */
         if (0) {
 #if LWGPS_CFG_STATEMENT_GPGGA
-        } else if (!strncmp(ghandle->p.term_str, "$GPGGA", 6) || !strncmp(ghandle->p.term_str, "$GNGGA", 6)) {
+        } else if (ghandle->p.term_str[0] == '$' && ghandle->p.term_str[1] == 'G'
+                && !strncmp(ghandle->p.term_str + 3, "GGA", 3)) {
             ghandle->p.stat = STAT_GGA;
 #endif /* LWGPS_CFG_STATEMENT_GPGGA */
 #if LWGPS_CFG_STATEMENT_GPGSA
-        } else if (!strncmp(ghandle->p.term_str, "$GPGSA", 6) || !strncmp(ghandle->p.term_str, "$GNGSA", 6)) {
+        } else if (ghandle->p.term_str[0] == '$' && ghandle->p.term_str[1] == 'G'
+                && !strncmp(ghandle->p.term_str + 3, "GSA", 3)) {
             ghandle->p.stat = STAT_GSA;
 #endif /* LWGPS_CFG_STATEMENT_GPGSA */
 #if LWGPS_CFG_STATEMENT_GPGSV
-        } else if (!strncmp(ghandle->p.term_str, "$GPGSV", 6) || !strncmp(ghandle->p.term_str, "$GNGSV", 6)) {
+        } else if (ghandle->p.term_str[0] == '$' && ghandle->p.term_str[1] == 'G'
+                && !strncmp(ghandle->p.term_str + 3, "GSV", 3)) {
             ghandle->p.stat = STAT_GSV;
 #endif /* LWGPS_CFG_STATEMENT_GPGSV */
 #if LWGPS_CFG_STATEMENT_GPRMC
-        } else if (!strncmp(ghandle->p.term_str, "$GPRMC", 6) || !strncmp(ghandle->p.term_str, "$GNRMC", 6)) {
+        } else if (ghandle->p.term_str[0] == '$' && ghandle->p.term_str[1] == 'G'
+                && !strncmp(ghandle->p.term_str + 3, "RMC", 3)) {
             ghandle->p.stat = STAT_RMC;
 #endif /* LWGPS_CFG_STATEMENT_GPRMC */
 #if LWGPS_CFG_STATEMENT_PUBX
@@ -262,8 +266,20 @@ prv_parse_term(lwgps_t* ghandle) {
 #if LWGPS_CFG_STATEMENT_GPGSV
     } else if (ghandle->p.stat == STAT_GSV) { /* Process GPGSV statement */
         switch (ghandle->p.term_num) {
-            case 2: /* Current GPGSV statement number */
+            case 1: /* Total number of messages in this GSV series */
+                ghandle->p.data.gsv.num_msgs = (uint8_t)prv_parse_number(ghandle, NULL);
+                break;
+            case 2: /* Current message number within this GSV series */
                 ghandle->p.data.gsv.stat_num = (uint8_t)prv_parse_number(ghandle, NULL);
+                if (ghandle->p.data.gsv.stat_num == 1 && !ghandle->gsv_cycle_active) {
+                    /* First GSV series of this NMEA cycle: clear stale satellite data */
+#if LWGPS_CFG_STATEMENT_GPGSV_SAT_DET
+                    LWGPS_MEMSET(ghandle->sats_in_view_desc, 0, sizeof(ghandle->sats_in_view_desc));
+#endif /* LWGPS_CFG_STATEMENT_GPGSV_SAT_DET */
+                    ghandle->gsv_series_offset = 0;
+                    ghandle->sats_in_view = 0;
+                    ghandle->gsv_cycle_active = 1;
+                }
                 break;
             case 3: /* Process satellites in view */
                 ghandle->p.data.gsv.sats_in_view = (uint8_t)prv_parse_number(ghandle, NULL);
@@ -271,17 +287,23 @@ prv_parse_term(lwgps_t* ghandle) {
             default:
 #if LWGPS_CFG_STATEMENT_GPGSV_SAT_DET
                 if (ghandle->p.term_num >= 4 && ghandle->p.term_num <= 19) { /* Check current term number */
-                    uint8_t index, term_num = ghandle->p.term_num - 4; /* Normalize term number from 4-19 to 0-15 */
-                    uint16_t value;
+                    uint8_t term_num = ghandle->p.term_num - 4; /* Normalize term number from 4-19 to 0-15 */
+                    uint8_t sat_offset = term_num >> 2;          /* Satellite offset within this message (0-3) */
 
-                    index = ((ghandle->p.data.gsv.stat_num - 1) << 0x02) + (term_num >> 2); /* Get array index */
+                    /* Reject terms beyond the declared satellite count (e.g. NMEA 4.10+ signal ID field) */
+                    uint8_t sat_in_series = ((ghandle->p.data.gsv.stat_num - 1) << 0x02) + sat_offset;
+                    if (sat_in_series >= ghandle->p.data.gsv.sats_in_view) {
+                        break;
+                    }
+
+                    uint8_t index = ghandle->gsv_series_offset + sat_in_series; /* Absolute index across all series */
                     if (index < sizeof(ghandle->sats_in_view_desc) / sizeof(ghandle->sats_in_view_desc[0])) {
-                        value = (uint16_t)prv_parse_number(ghandle, NULL); /* Parse number as integer */
+                        uint16_t value = (uint16_t)prv_parse_number(ghandle, NULL); /* Parse number as integer */
                         switch (term_num & 0x03) {
                             case 0: ghandle->sats_in_view_desc[index].num = value; break;
-                            case 1: ghandle->sats_in_view_desc[index].elevation = value; break;
+                            case 1: ghandle->sats_in_view_desc[index].elevation = (uint8_t)value; break;
                             case 2: ghandle->sats_in_view_desc[index].azimuth = value; break;
-                            case 3: ghandle->sats_in_view_desc[index].snr = value; break;
+                            case 3: ghandle->sats_in_view_desc[index].snr = (uint8_t)value; break;
                             default: break;
                         }
                     }
@@ -400,6 +422,12 @@ prv_check_crc(lwgps_t* ghandle) {
  */
 static uint8_t
 prv_copy_from_tmp_memory(lwgps_t* ghandle) {
+#if LWGPS_CFG_STATEMENT_GPGSV
+    /* End GSV cycle when a non-GSV sentence completes */
+    if (ghandle->p.stat != STAT_GSV && ghandle->gsv_cycle_active) {
+        ghandle->gsv_cycle_active = 0;
+    }
+#endif /* LWGPS_CFG_STATEMENT_GPGSV */
     if (0) {
 #if LWGPS_CFG_STATEMENT_GPGGA
     } else if (ghandle->p.stat == STAT_GGA) {
@@ -425,7 +453,11 @@ prv_copy_from_tmp_memory(lwgps_t* ghandle) {
 #endif /* LWGPS_CFG_STATEMENT_GPGSA */
 #if LWGPS_CFG_STATEMENT_GPGSV
     } else if (ghandle->p.stat == STAT_GSV) {
-        ghandle->sats_in_view = ghandle->p.data.gsv.sats_in_view;
+        /* Accumulate sats_in_view: add this series' count once (when its last message completes) */
+        if (ghandle->p.data.gsv.stat_num == ghandle->p.data.gsv.num_msgs) {
+            ghandle->sats_in_view += ghandle->p.data.gsv.sats_in_view;
+            ghandle->gsv_series_offset = ghandle->sats_in_view;
+        }
 #endif /* LWGPS_CFG_STATEMENT_GPGSV */
 #if LWGPS_CFG_STATEMENT_GPRMC
     } else if (ghandle->p.stat == STAT_RMC) {
