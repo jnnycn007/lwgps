@@ -37,7 +37,7 @@
 #include <limits.h>
 #include <stddef.h>
 #include <stdint.h>
-#include "lwgps/lwgps_opt.h"
+#include "lwgps_opt.h"
 
 #ifdef __cplusplus
 extern "C" {
@@ -63,8 +63,8 @@ typedef float lwgps_float_t;
  * \brief           Satellite descriptor
  */
 typedef struct {
-    uint8_t num;       /*!< Satellite number */
-    uint8_t elevation; /*!< Elevation value */
+    uint16_t num;      /*!< Satellite number */
+    uint8_t elevation; /*!< Elevation in degrees */
     uint16_t azimuth;  /*!< Azimuth in degrees */
     uint8_t snr;       /*!< Signal-to-noise ratio */
 } lwgps_sat_t;
@@ -113,9 +113,11 @@ typedef struct {
 
 #if LWGPS_CFG_STATEMENT_GPGSV || __DOXYGEN__
     /* Information related to GPGSV statement */
-    uint8_t sats_in_view; /*!< Number of satellites in view */
+    uint8_t sats_in_view;        /*!< Number of satellites in view (accumulated across all constellations/signals) */
+    uint8_t gsv_series_offset;   /*!< Running satellite descriptor index offset for multi-series accumulation */
+    uint8_t gsv_cycle_active;    /*!< Flag: GSV cycle in progress for this NMEA epoch */
 #if LWGPS_CFG_STATEMENT_GPGSV_SAT_DET || __DOXYGEN__
-    lwgps_sat_t sats_in_view_desc[12];
+    lwgps_sat_t sats_in_view_desc[LWGPS_CFG_SATS_IN_VIEW_SIZE];
 #endif /* LWGPS_CFG_STATEMENT_GPGSV_SAT_DET || __DOXYGEN__ */
 #endif /* LWGPS_CFG_STATEMENT_GPGSV || __DOXYGEN__ */
 
@@ -195,8 +197,11 @@ typedef struct {
 #endif                                      /* LWGPS_CFG_STATEMENT_GPGSA */
 #if LWGPS_CFG_STATEMENT_GPGSV
             struct {
-                uint8_t sats_in_view; /*!< Number of stallites in view */
-                uint8_t stat_num;     /*!< Satellite line number during parsing GPGSV data */
+                uint8_t sats_in_view; /*!< Number of satellites in view for this series */
+                uint8_t stat_num;     /*!< Current message number within this GSV series */
+                uint8_t num_msgs;     /*!< Total number of messages in this GSV series */
+                uint8_t gnss;         /*!< Constellation from talker ID (\ref lwgps_gnss_t) */
+                uint8_t signal_id;    /*!< Signal/band ID (NMEA 4.10+) */
             } gsv;                    /*!< GPGSV message */
 #endif                                /* LWGPS_CFG_STATEMENT_GPGSV */
 #if LWGPS_CFG_STATEMENT_GPRMC
