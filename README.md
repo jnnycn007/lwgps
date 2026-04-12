@@ -10,8 +10,8 @@ Platform independent GPS NMEA parser for embedded systems.
 * Platform independent, easy to use
 * Built-in support for 4 GPS statements
     * ``GPGGA`` or ``GNGGA``: GPS fix data
-    * ``GPGSA`` or ``GNGSA``: GPS active satellites and dillusion of position
-    * ``GPGSV`` or ``GNGSV``: List of satellites in view zone
+    * ``GPGSA`` or ``GNGSA``: GPS active satellites and dilution of precision
+    * ``G(P/L/A/B)GSV`` or ``GNGSV``: List of satellites in view zone for all constellations
     * ``GPRMC`` or ``GNRMC``: Recommended minimum specific GPS/Transit data
 * Optional ``float`` or ``double`` floating point units
 * Low-level layer is separated from application layer, thus allows you to add custom communication with GPS device
