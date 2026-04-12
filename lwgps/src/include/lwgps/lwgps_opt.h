@@ -130,6 +130,17 @@ extern "C" {
 #endif
 
 /**
+ * \brief           Maximum number of satellite descriptors stored in \ref lwgps_t::sats_in_view_desc.
+ *
+ *                  48 covers GPS(32) + GLONASS(24) + Galileo(24) + BeiDou(35) worst-case
+ *                  visible subsets. Increase if more are needed; decrease to save RAM
+ *                  (~8 bytes per descriptor).
+ */
+#ifndef LWGPS_CFG_SATS_IN_VIEW_SIZE
+#define LWGPS_CFG_SATS_IN_VIEW_SIZE 48
+#endif
+
+/**
  * \brief           Enables `1` or disables `0` parsing and generation
  *                  of PUBX (uBlox) messages
  *
