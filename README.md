@@ -8,11 +8,11 @@ Platform independent all-constellation GNSS NMEA parser for embedded systems.
 
 * Written in C (C11)
 * Platform independent, easy to use
-* Built-in support for all-constellation GPS statements
-    * ``G*GGA`` or ``GNGGA``: GNSS fix data
-    * ``G*GSA`` or ``GNGSA``: Active satellites and dilution of precision
-    * ``G*GSV`` or ``GNGSV``: List of satellites in view zone
-    * ``G*RMC`` or ``GNRMC``: Recommended minimum specific GNSS/Transit data
+* Built-in support for all-constellation GNSS statements
+    * ``GPGGA``, ``G*GGA`` or ``GNGGA``: GNSS fix data
+    * ``GPGSA``, ``G*GSA`` or ``GNGSA``: Active satellites and dilution of precision
+    * ``GPGSV``, ``G*GSV`` or ``GNGSV``: List of satellites in view zone
+    * ``GPRMC``, ``G*RMC`` or ``GNRMC``: Recommended minimum specific GNSS/Transit data
 * Optional ``float`` or ``double`` floating point units
 * Low-level layer is separated from application layer, thus allows you to add custom communication with GPS device
 * Works with operating systems
