@@ -300,7 +300,7 @@ prv_parse_term(lwgps_t* ghandle) {
                     if (index < sizeof(ghandle->sats_in_view_desc) / sizeof(ghandle->sats_in_view_desc[0])) {
                         uint16_t value = (uint16_t)prv_parse_number(ghandle, NULL); /* Parse number as integer */
                         switch (term_num & 0x03) {
-                            case 0: ghandle->sats_in_view_desc[index].num = value; break;
+                            case 0: ghandle->sats_in_view_desc[index].num = (uint8_t)value; break;
                             case 1: ghandle->sats_in_view_desc[index].elevation = (uint8_t)value; break;
                             case 2: ghandle->sats_in_view_desc[index].azimuth = value; break;
                             case 3: ghandle->sats_in_view_desc[index].snr = (uint8_t)value; break;
