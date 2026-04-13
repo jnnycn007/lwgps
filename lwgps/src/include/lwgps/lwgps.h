@@ -63,7 +63,7 @@ typedef float lwgps_float_t;
  * \brief           Satellite descriptor
  */
 typedef struct {
-    uint16_t num;      /*!< Satellite number */
+    uint8_t num;       /*!< Satellite number */
     uint8_t elevation; /*!< Elevation in degrees */
     uint16_t azimuth;  /*!< Azimuth in degrees */
     uint8_t snr;       /*!< Signal-to-noise ratio */
