@@ -1,6 +1,6 @@
 # Lightweight GPS NMEA parser
 
-Platform independent GPS NMEA parser for embedded systems.
+Platform independent all-constellation GNSS NMEA parser for embedded systems.
 
 <h3>Read first: <a href="http://docs.majerle.eu/projects/lwgps/">Documentation</a></h3>
 
@@ -8,11 +8,11 @@ Platform independent GPS NMEA parser for embedded systems.
 
 * Written in C (C11)
 * Platform independent, easy to use
-* Built-in support for 4 GPS statements
-    * ``GPGGA`` or ``GNGGA``: GPS fix data
-    * ``GPGSA`` or ``GNGSA``: GPS active satellites and dillusion of position
-    * ``GPGSV`` or ``GNGSV``: List of satellites in view zone
-    * ``GPRMC`` or ``GNRMC``: Recommended minimum specific GPS/Transit data
+* Built-in support for all-constellation GNSS statements
+    * ``GPGGA``, ``G*GGA`` or ``GNGGA``: GNSS fix data
+    * ``GPGSA``, ``G*GSA`` or ``GNGSA``: Active satellites and dilution of precision
+    * ``GPGSV``, ``G*GSV`` or ``GNGSV``: List of satellites in view zone
+    * ``GPRMC``, ``G*RMC`` or ``GNRMC``: Recommended minimum specific GNSS/Transit data
 * Optional ``float`` or ``double`` floating point units
 * Low-level layer is separated from application layer, thus allows you to add custom communication with GPS device
 * Works with operating systems
