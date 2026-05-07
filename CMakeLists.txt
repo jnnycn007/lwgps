@@ -1,9 +1,20 @@
 cmake_minimum_required(VERSION 3.22)
 
 if(DEFINED IDF_PATH)
+    set(LWGPS_CUSTOM_INC_DIR ${CMAKE_CURRENT_BINARY_DIR}/lib_inc)
+
+    if(NOT LWGPS_OPTS_FILE)
+        message(STATUS "Using default lwgps_opts.h file")
+        set(LWGPS_OPTS_FILE ${CMAKE_CURRENT_LIST_DIR}/lwgps/src/include/lwgps/lwgps_opts_template.h)
+    else()
+        message(STATUS "Using custom lwgps_opts.h file from ${LWGPS_OPTS_FILE}")
+    endif()
+
+    configure_file(${LWGPS_OPTS_FILE} ${LWGPS_CUSTOM_INC_DIR}/lwgps_opts.h COPYONLY)
+
     idf_component_register(
         SRCS "lwgps/src/lwgps/lwgps.c"
-        INCLUDE_DIRS "lwgps/src/include"
+        INCLUDE_DIRS "lwgps/src/include" ${LWGPS_CUSTOM_INC_DIR}
     )
     return()
 endif()
