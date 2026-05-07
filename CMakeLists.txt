@@ -1,6 +1,14 @@
 cmake_minimum_required(VERSION 3.22)
 
-# Setup project
+if(DEFINED IDF_PATH)
+    idf_component_register(
+        SRCS "lwgps/src/lwgps/lwgps.c"
+        INCLUDE_DIRS "lwgps/src/include"
+    )
+    return()
+endif()
+
+# Standalone / subdirectory build
 project(LwLibPROJECT)
 
 if(NOT PROJECT_IS_TOP_LEVEL)
