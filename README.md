@@ -38,3 +38,19 @@ To build the code and run basic tests on your host::
 
         cd examples
         make test
+
+## ESP-IDF integration
+
+To use lwgps as an ESP-IDF component, add the repository to your project as a managed component or a local component directory, then point the build at your options header before lwgps is configured.
+
+If you want to keep the configuration file inside your own component, add a `project_include.cmake` file to that component with:
+
+```cmake
+set(LWGPS_OPTS_FILE "${COMPONENT_DIR}/lwgps_opts.h")
+```
+
+Then make sure that component depends on `lwgps` via `REQUIRES` or `PRIV_REQUIRES`, and place your `lwgps_opts.h` file next to the component `CMakeLists.txt`.
+
+If you prefer to set it at the project level instead, define `LWGPS_OPTS_FILE` in the top-level `CMakeLists.txt` before `include($ENV{IDF_PATH}/tools/cmake/project.cmake)`.
+
+The configuration file should be a copy of `lwgps/src/include/lwgps/lwgps_opts_template.h` renamed to `lwgps_opts.h`.
