@@ -29,7 +29,7 @@
  * This file is part of LwGPS - Lightweight GPS NMEA parser library.
  *
  * Author:          Tilen MAJERLE <tilen@majerle.eu>
- * Version:         v2.2.0
+ * Version:         v2.3.0
  */
 #include <stdlib.h>
 #include <string.h>
@@ -174,22 +174,22 @@ prv_parse_term(lwgps_t* ghandle) {
         if (0) {
 #if LWGPS_CFG_STATEMENT_GPGGA
         } else if (ghandle->p.term_str[0] == '$' && ghandle->p.term_str[1] == 'G'
-                && !strncmp(ghandle->p.term_str + 3, "GGA", 3)) {
+                   && !strncmp(ghandle->p.term_str + 3, "GGA", 3)) {
             ghandle->p.stat = STAT_GGA;
 #endif /* LWGPS_CFG_STATEMENT_GPGGA */
 #if LWGPS_CFG_STATEMENT_GPGSA
         } else if (ghandle->p.term_str[0] == '$' && ghandle->p.term_str[1] == 'G'
-                && !strncmp(ghandle->p.term_str + 3, "GSA", 3)) {
+                   && !strncmp(ghandle->p.term_str + 3, "GSA", 3)) {
             ghandle->p.stat = STAT_GSA;
 #endif /* LWGPS_CFG_STATEMENT_GPGSA */
 #if LWGPS_CFG_STATEMENT_GPGSV
         } else if (ghandle->p.term_str[0] == '$' && ghandle->p.term_str[1] == 'G'
-                && !strncmp(ghandle->p.term_str + 3, "GSV", 3)) {
+                   && !strncmp(ghandle->p.term_str + 3, "GSV", 3)) {
             ghandle->p.stat = STAT_GSV;
 #endif /* LWGPS_CFG_STATEMENT_GPGSV */
 #if LWGPS_CFG_STATEMENT_GPRMC
         } else if (ghandle->p.term_str[0] == '$' && ghandle->p.term_str[1] == 'G'
-                && !strncmp(ghandle->p.term_str + 3, "RMC", 3)) {
+                   && !strncmp(ghandle->p.term_str + 3, "RMC", 3)) {
             ghandle->p.stat = STAT_RMC;
 #endif /* LWGPS_CFG_STATEMENT_GPRMC */
 #if LWGPS_CFG_STATEMENT_PUBX
@@ -288,7 +288,7 @@ prv_parse_term(lwgps_t* ghandle) {
 #if LWGPS_CFG_STATEMENT_GPGSV_SAT_DET
                 if (ghandle->p.term_num >= 4 && ghandle->p.term_num <= 19) { /* Check current term number */
                     uint8_t term_num = ghandle->p.term_num - 4; /* Normalize term number from 4-19 to 0-15 */
-                    uint8_t sat_offset = term_num >> 2;          /* Satellite offset within this message (0-3) */
+                    uint8_t sat_offset = term_num >> 2;         /* Satellite offset within this message (0-3) */
 
                     /* Reject terms beyond the declared satellite count (e.g. NMEA 4.10+ signal ID field) */
                     uint8_t sat_in_series = ((ghandle->p.data.gsv.stat_num - 1) << 0x02) + sat_offset;

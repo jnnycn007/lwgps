@@ -29,7 +29,7 @@
  * This file is part of LwGPS - Lightweight GPS NMEA parser library.
  *
  * Author:          Tilen MAJERLE <tilen@majerle.eu>
- * Version:         v2.2.0
+ * Version:         v2.3.0
  */
 #ifndef LWGPS_HDR_H
 #define LWGPS_HDR_H
@@ -113,9 +113,9 @@ typedef struct {
 
 #if LWGPS_CFG_STATEMENT_GPGSV || __DOXYGEN__
     /* Information related to GPGSV statement */
-    uint8_t sats_in_view;        /*!< Number of satellites in view (accumulated across all constellations/signals) */
-    uint8_t gsv_series_offset;   /*!< Running satellite descriptor index offset for multi-series accumulation */
-    uint8_t gsv_cycle_active;    /*!< Flag: GSV cycle in progress for this NMEA epoch */
+    uint8_t sats_in_view;      /*!< Number of satellites in view (accumulated across all constellations/signals) */
+    uint8_t gsv_series_offset; /*!< Running satellite descriptor index offset for multi-series accumulation */
+    uint8_t gsv_cycle_active;  /*!< Flag: GSV cycle in progress for this NMEA epoch */
 #if LWGPS_CFG_STATEMENT_GPGSV_SAT_DET || __DOXYGEN__
     lwgps_sat_t sats_in_view_desc[LWGPS_CFG_SATS_IN_VIEW_SIZE];
 #endif /* LWGPS_CFG_STATEMENT_GPGSV_SAT_DET || __DOXYGEN__ */

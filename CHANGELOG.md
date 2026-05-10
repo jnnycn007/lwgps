@@ -2,6 +2,8 @@
 
 ## Develop
 
+## v2.3.0
+
 - Add support for differential GPS last time
 - Rework library CMake with removed INTERFACE type
 - Add `time_valid` and `date_valid` to give information if information from modem is valid
