@@ -6,6 +6,7 @@
 - Rework library CMake with removed INTERFACE type
 - Add `time_valid` and `date_valid` to give information if information from modem is valid
 - Fix the platformio library package description
+- Improve the satellite management
 
 ## v2.2.0
 

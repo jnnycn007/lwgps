@@ -3,9 +3,9 @@
  * \author          Tilen MAJERLE <tilen@majerle.eu>
  * \brief           
  * \version         0.1
- * \date            2025-03-30
+ * \date            2026-03-30
  * 
- * @copyright Copyright (c) 2025
+ * @copyright Copyright (c) 2026
  * 
  */
 #include <stdio.h>
