@@ -17,6 +17,7 @@ Platform independent all-constellation GNSS NMEA parser for embedded systems.
 * Low-level layer is separated from application layer, thus allows you to add custom communication with GPS device
 * Works with operating systems
 * Works with different communication interfaces
+* Can be used as an ESP-IDF component
 * User friendly MIT license
 
 ## Contribute

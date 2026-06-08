@@ -92,6 +92,24 @@ and it should be copied (or simply renamed in-place) and named ``lwgps_opts.h``
     If you are using *CMake* build system, define the variable ``LWGPS_OPTS_FILE`` before adding library's directory to the *CMake* project.
     Variable must contain the path to the user options file. If not provided and to avoid build error, one will be generated in the build directory.
 
+ESP-IDF integration
+*******************
+
+To use LwGPS as an ESP-IDF component, add the repository to your project as a managed component or a local component directory.
+Then point the build at your options header before LwGPS is configured.
+
+If you want to keep the configuration file inside your own component, add a ``project_include.cmake`` file to that component with:
+
+.. code-block:: cmake
+
+    set(LWGPS_OPTS_FILE "${COMPONENT_DIR}/lwgps_opts.h")
+
+Then make sure that component depends on ``lwgps`` via ``REQUIRES`` or ``PRIV_REQUIRES``, and place your ``lwgps_opts.h`` file next to the component ``CMakeLists.txt``.
+
+If you prefer to set it at the project level instead, define ``LWGPS_OPTS_FILE`` in the top-level ``CMakeLists.txt`` before ``include($ENV{IDF_PATH}/tools/cmake/project.cmake)``.
+
+The configuration file should be a copy of ``lwgps/src/include/lwgps/lwgps_opts_template.h`` renamed to ``lwgps_opts.h``.
+
 Configuration options list is available available in the :ref:`api_lwgps_opt` section.
 If any option is about to be modified, it should be done in configuration file
 
