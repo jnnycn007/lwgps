@@ -29,6 +29,7 @@ Features
 * Low-level layer is separated from application layer, thus allows you to add custom communication with GPS device
 * Works with operating systems
 * Works with different communication interfaces
+* Can be used as an ESP-IDF component
 * User friendly MIT license
 
 Requirements
@@ -92,4 +93,3 @@ Table of contents
     LwSHELL - Shell <https://github.com/MaJerle/lwshell>
     LwUTIL - Utility functions <https://github.com/MaJerle/lwutil>
     LwWDG - RTOS task watchdog <https://github.com/MaJerle/lwwdg>
-

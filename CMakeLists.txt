@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.22)
 
-if(DEFINED IDF_PATH)
+if(DEFINED ESP_PLATFORM)
     set(LWGPS_CUSTOM_INC_DIR ${CMAKE_CURRENT_BINARY_DIR}/lib_inc)
 
     if(NOT LWGPS_OPTS_FILE)
